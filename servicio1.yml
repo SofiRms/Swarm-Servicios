@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  servicio-apache:
+    image: httpd:latest
+    deploy:
+      replicas: 3
+    ports:
+      - "8080:80"
+    volumes:
+      - /Home/apache-datos/:/usr/local/apache2/htdocs
+    networks:
+      - red
+
+  servicio-node:
+    image: node:18-alpine
+    deploy:
+      replicas: 3
+    ports:
+      - "8090:3000"
+    volumes:
+      - /Home/node-datos/:server-node
+    networks:
+      - red
+
+  mysql1:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: prueba
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - red
+
+networks:
+  red:
